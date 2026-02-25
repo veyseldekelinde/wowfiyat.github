@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOW BURGER - Yönetim Paneli</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086965100961263"
+     crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary-color: #ffc107; }
+        body { background: #1a1a1a; min-height: 100vh; color: white; }
+        .navbar { background: linear-gradient(90deg, #ff6b00, #ff8c00) !important; }
+        .card-img-top { height: 150px; object-fit: cover; }
+        .card { border-radius: 15px; background: #2d2d2d; color: white; }
+        .price-tag { color: var(--primary-color); font-weight: bold; font-size: 1.2rem; }
+        .admin-panel { background: #2d2d2d; padding: 20px; border-radius: 15px; border: 2px solid var(--primary-color); }
+        .image-upload-area { border: 2px dashed #ffc107; border-radius: 10px; padding: 15px; text-align: center; cursor: pointer; background: #1a1a1a; }
+        
+        .auth-container { max-width: 450px; margin: 80px auto; }
+        .auth-card { background: #2d2d2d; padding: 40px; border-radius: 20px; color: white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        
+        .edit-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .edit-modal.show { display: flex; }
+        .edit-box { background: #2d2d2d; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; }
+        
+        .nav-tabs .nav-link { color: #aaa; }
+        .nav-tabs .nav-link.active { background: #2d2d2d; color: #ffc107; border-color: #ffc107; }
+    </style>
+</head>
+<body>
+    <!-- Giriş/Kayıt Ekranı -->
+    <div id="authScreen" class="auth-container">
+        <div class="auth-card">
+            <h2 class="text-center mb-4"><i class="fas fa-hamburger text-warning"></i> WOW BURGER</h2>
+            
+            <ul class="nav nav-tabs mb-4" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#loginPane" type="button">Giriş Yap</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#registerPane" type="button">Kayıt Ol</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content">
+                <!-- Giriş Yap -->
+                <div class="tab-pane fade show active" id="loginPane">
+                    <!-- Kayıtlı Kullanıcı Hatırlatma -->
+                    <div id="savedUserAlert" class="alert alert-info" style="display:none; background: #1a1a1a; border: 1px solid #ffc107; color: #ffc107;">
+                        <i class="fas fa-user-circle"></i> <span id="savedUsername"></span>
+                        <button type="button" class="btn btn-sm btn-link text-warning p-0 ms-2" onclick="useSavedUser()">Bu hesapla giriş yap</button>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label>Kullanıcı Adı</label>
+                        <input type="text" id="loginUsername" class="form-control" placeholder="Kullanıcı adınız">
+                    </div>
+                    <div class="mb-3">
+                        <label>Şifre</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Şifreniz">
+                    </div>
+                    <button onclick="login()" class="btn btn-warning w-100">Giriş Yap</button>
+                    
+                    <div class="mt-3 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i> 
+                            <span id="rememberInfo">Kullanıcı adınız kayıtlı: </span>
+                            <span id="rememberedUser" class="text-warning fw-bold"></span>
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Kayıt Ol -->
+                <div class="tab-pane fade" id="registerPane">
+                    <div class="mb-3">
+                        <label>Kullanıcı Adı</label>
+                        <input type="text" id="regUsername" class="form-control" placeholder="Kullanıcı adı">
+                    </div>
+                    <div class="mb-3">
+                        <label>Şifre</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Şifreniz">
+                    </div>
+                    <button onclick="register()" class="btn btn-warning w-100">Kayıt Ol</button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="fiyatlistesi.html" target="_blank" class="text-warning">Müşteri görünümü</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Uygulama -->
+    <div id="mainApp" style="display:none;">
+        <nav class="navbar navbar-dark mb-4">
+            <div class="container">
+                <a class="navbar-brand"><i class="fas fa-hamburger"></i> WOW BURGER Yönetim</a>
+                <div>
+                    <span id="userDisplay" class="text-warning me-3"></span>
+                    <a href="fiyatlistesi.html" target="_blank" class="btn btn-outline-light btn-sm me-2">Müşteri Görünümü</a>
+                    <button class="btn btn-warning btn-sm" onclick="logout()">Çıkış</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="admin-panel">
+                <h4 class="text-warning mb-3"><i class="fas fa-cogs"></i> Ürün Yönetimi</h4>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <input type="text" id="newName" class="form-control" placeholder="Ürün Adı">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" id="newPrice" class="form-control" placeholder="Fiyat (TL)">
+                    </div>
+                    <div class="col-md-4">
+                        <div class="image-upload-area" onclick="document.getElementById('imageInput').click()">
+                            <i class="fas fa-cloud-upload-alt text-warning"></i> Resim seç
+                            <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
+                            <input type="text" id="newImage" class="form-control mt-2" placeholder="veya resim URL">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button onclick="addProduct()" class="btn btn-success w-100 h-100">Ekle</button>
+                    </div>
+                </div>
+                <hr class="border-warning">
+                <h5 class="text-warning">Mevcut Ürünler</h5>
+                <table class="table table-dark table-hover">
+                    <thead><tr><th>Resim</th><th>Ürün</th><th>Fiyat</th><th>İşlemler</th></tr></thead>
+                    <tbody id="adminList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Düzenleme Modal -->
+    <div class="edit-modal" id="editModal">
+        <div class="edit-box">
+            <h5 class="text-warning mb-3"><i class="fas fa-edit"></i> Ürün Düzenle</h5>
+            <input type="hidden" id="editId">
+            <div class="mb-2">
+                <label>Ürün Adı</label>
+                <input type="text" id="editName" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label>Fiyat (TL)</label>
+                <input type="number" id="editPrice" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label>Resim</label>
+                <div class="image-upload-area" onclick="document.getElementById('editImageInput').click()">
+                    <i class="fas fa-cloud-upload-alt text-warning"></i> Resim seç
+                    <input type="file" id="editImageInput" accept="image/*" style="display:none" onchange="handleEditImageUpload(event)">
+                </div>
+                <input type="text" id="editImage" class="form-control mt-2" placeholder="veya resim URL">
+            </div>
+            <div class="mt-3">
+                <button onclick="saveEdit()" class="btn btn-success w-100">Kaydet</button>
+                <button onclick="closeEditModal()" class="btn btn-secondary w-100 mt-2">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let currentUser = null;
+        let currentPassword = null;
+        let products = [];
+
+        // Kayıt Ol (Email yok!)
+        async function register() {
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            
+            if (!username || !password) {
+                alert('Kullanıcı adı ve şifre zorunludur!');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+                    // Giriş sekmesine geç
+                    document.getElementById('login-tab').click();
+                    document.getElementById('loginUsername').value = username;
+                    document.getElementById('loginPassword').value = password;
+                } else {
+                    alert(data.error);
+                }
+            } catch (e) {
+                alert('Sunucu hatası: ' + e.message);
+            }
+        }
+
+        // Giriş
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                alert('Kullanıcı adı ve şifre girin!');
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    currentUser = data.user;
+                    currentPassword = password;
+                    localStorage.setItem('wowburger_user', JSON.stringify(data.user));
+                    localStorage.setItem('wowburger_pass', password);
+                    document.getElementById('authScreen').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    document.getElementById('userDisplay').textContent = '@' + data.user.username;
+                    loadProducts();
+                } else {
+                    alert(data.error);
+                }
+            } catch (e) {
+                alert('Sunucu bağlantısı yok! Server çalışıyor mu?');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('wowburger_user');
+            localStorage.removeItem('wowburger_pass');
+            currentUser = null;
+            currentPassword = null;
+            document.getElementById('authScreen').style.display = 'block';
+            document.getElementById('mainApp').style.display = 'none';
+        }
+
+        // Ürünler
+        async function loadProducts() {
+            try {
+                const res = await fetch(`${API_URL}/api/products`);
+                products = await res.json();
+                renderAdminList();
+            } catch (e) {
+                alert('Ürünler yüklenemedi');
+            }
+        }
+
+async function addProduct() {
+            const name = document.getElementById('newName').value;
+            const price = document.getElementById('newPrice').value;
+            const image = document.getElementById('newImage').value;
+            
+            if (!name || !price) {
+                alert('Ürün adı ve fiyatı zorunlu!');
+                return;
+            }
+            
+            if (!currentUser || !currentPassword) {
+                alert('Lütfen önce giriş yapın!');
+                return;
+            }
+            
+            try {
+                const authHeader = 'Basic ' + btoa(currentUser.username + ':' + currentPassword);
+                console.log('Auth:', authHeader);
+                
+                const res = await fetch(`${API_URL}/api/products`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': authHeader
+                    },
+                    body: JSON.stringify({ name, price, image })
+                });
+                
+                const data = await res.json();
+                console.log('Response:', res.status, data);
+                
+                if (res.ok) {
+                    loadProducts();
+                    document.getElementById('newName').value = '';
+                    document.getElementById('newPrice').value = '';
+                    document.getElementById('newImage').value = '';
+                    document.getElementById('imageInput').value = '';
+                    alert('Ürün eklendi!');
+                } else {
+                    alert('Ekleme başarısız: ' + (data.error || 'Bilinmeyen hata'));
+                }
+            } catch (e) {
+                alert('Hata: ' + e.message);
+            }
+        }
+
+        async function deleteProduct(index) {
+            if (confirm('Silinsin mi?')) {
+                const p = products[index];
+                try {
+                    await fetch(`${API_URL}/api/products/${p.id}`, {
+                        method: 'DELETE',
+                        headers: { 
+                            'Authorization': 'Basic ' + btoa(currentUser.username + ':' + currentPassword)
+                        }
+                    });
+                    loadProducts();
+                } catch (e) {
+                    alert('Hata: ' + e.message);
+                }
+            }
+        }
+
+        function editProduct(index) {
+            const p = products[index];
+            document.getElementById('editId').value = index;
+            document.getElementById('editName').value = p.name;
+            document.getElementById('editPrice').value = p.price;
+            document.getElementById('editImage').value = p.image || '';
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        async function saveEdit() {
+            const index = document.getElementById('editId').value;
+            const p = products[index];
+            
+            try {
+                await fetch(`${API_URL}/api/products/${p.id}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Basic ' + btoa(currentUser.username + ':' + currentPassword)
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById('editName').value,
+                        price: document.getElementById('editPrice').value,
+                        image: document.getElementById('editImage').value
+                    })
+                });
+                closeEditModal();
+                loadProducts();
+                alert('Güncellendi!');
+            } catch (e) {
+                alert('Hata: ' + e.message);
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('newImage').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleEditImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editImage').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function renderAdminList() {
+            document.getElementById('adminList').innerHTML = products.map((p, i) => `
+                <tr>
+                    <td><img src="${p.image || 'https://via.placeholder.com/50x50'}" width="50" height="50" style="object-fit:cover;border-radius:5px;"></td>
+                    <td>${p.name}</td>
+                    <td class="text-warning fw-bold">${p.price} TL</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm me-1" onclick="editProduct(${i})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${i})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Kayıtlı kullanıcıyı göster
+        function showSavedUser() {
+            const savedUser = localStorage.getItem('wowburger_user');
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                document.getElementById('savedUsername').textContent = user.username;
+                document.getElementById('savedUserAlert').style.display = 'block';
+                document.getElementById('rememberedUser').textContent = user.username;
+                document.getElementById('loginUsername').value = user.username;
+            }
+        }
+
+        // Kayıtlı kullanıcı ile giriş yap
+        function useSavedUser() {
+            const savedPass = localStorage.getItem('wowburger_pass');
+            if (savedPass) {
+                document.getElementById('loginPassword').value = savedPass;
+                login();
+            } else {
+                alert('Şifrenizi giriniz');
+            }
+        }
+
+        // Oturum kontrolü
+        window.onload = function() {
+            const savedUser = localStorage.getItem('wowburger_user');
+            const savedPass = localStorage.getItem('wowburger_pass');
+            if (savedUser && savedPass) {
+                currentUser = JSON.parse(savedUser);
+                currentPassword = savedPass;
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('userDisplay').textContent = '@' + currentUser.username;
+                loadProducts();
+            } else if (savedUser) {
+                showSavedUser();
+            }
+        };
+    </script>
+</body>
+</html>

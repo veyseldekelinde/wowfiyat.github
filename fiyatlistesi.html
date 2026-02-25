@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOW BURGER - Fiyat Listesi</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086965100961263"
+     crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        
+        :root { 
+            --primary-color: #ffc107; 
+            --bg-color: #1a1a1a; 
+            --card-bg: #2d2d2d; 
+            --text-color: #ffffff;
+        }
+        
+        body { 
+            background: var(--bg-color); 
+            min-height: 100vh; 
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar { 
+            background: linear-gradient(90deg, #ff6b00, #ff8c00) !important;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+        }
+        
+        .navbar-brand {
+            font-size: 1.4rem !important;
+            letter-spacing: 1px;
+        }
+        
+        .logo-text {
+            background: linear-gradient(45deg, #ffc107, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800 !important;
+        }
+        
+        .lang-select {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+        
+        .lang-select:focus {
+            outline: none;
+            border-color: #ffc107;
+        }
+        
+        .lang-select option {
+            background: #2d2d2d;
+            color: white;
+        }
+        
+        .card-img-top { 
+            height: 160px; 
+            object-fit: cover; 
+            border-top-left-radius: 15px; 
+            border-top-right-radius: 15px; 
+        }
+        
+        .card { 
+            border-radius: 15px; 
+            background: var(--card-bg); 
+            color: var(--text-color); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .price-tag { 
+            color: var(--primary-color); 
+            font-weight: 800; 
+            font-size: 1.4rem;
+            text-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+        }
+        
+        .product-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fff;
+        }
+        
+        body.dark { 
+            --bg-color: #0a0a0a; 
+            --card-bg: #1a1a1a; 
+            --text-color: #ffffff; 
+        }
+        
+        body.light { 
+            --bg-color: #f8f9fa; 
+            --card-bg: #ffffff; 
+            --text-color: #212529; 
+        }
+        
+        body.warm { 
+            --bg-color: #1a0f0a; 
+            --card-bg: #2a1810; 
+            --text-color: #ffe4c4; 
+            --primary-color: #ff8c00; 
+        }
+        
+        .theme-btn { 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            border: 2px solid rgba(255,255,255,0.2); 
+            cursor: pointer; 
+            margin: 3px; 
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        
+        .theme-btn:hover { 
+            opacity: 1; 
+            transform: scale(1.1);
+            border-color: #ffc107;
+        }
+        
+        .theme-controls { 
+            position: fixed; 
+            bottom: 20px; 
+            right: 20px; 
+            z-index: 1000; 
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            padding: 10px 15px; 
+            border-radius: 25px; 
+            display: flex;
+            gap: 5px;
+        }
+        
+        .loading { 
+            text-align: center; 
+            padding: 80px 20px; 
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 4px;
+        }
+        
+        .header-section {
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .header-subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 576px) {
+            .card-img-top {
+                height: 120px;
+            }
+            
+            .price-tag {
+                font-size: 1.2rem;
+            }
+            
+            .product-name {
+                font-size: 0.9rem;
+            }
+            
+            .header-title {
+                font-size: 1.5rem;
+            }
+            
+            .theme-controls {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px 12px;
+            }
+            
+            .theme-btn {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .lang-select {
+                min-width: 110px;
+                font-size: 0.75rem;
+                padding: 6px 8px;
+            }
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark sticky-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-hamburger me-2"></i>
+                <span class="logo-text">WOW BURGER</span>
+            </a>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="tr">🇹🇷 Türkiye (TRY)</option>
+                <option value="en">🇬🇧 UK (GBP)</option>
+                <option value="de">🇩🇪 Deutschland (EUR)</option>
+                <option value="fr">🇫🇷 France (EUR)</option>
+                <option value="es">🇪🇸 España (EUR)</option>
+                <option value="it">🇮🇹 Italia (EUR)</option>
+                <option value="ru">🇷🇺 Россия (RUB)</option>
+                <option value="ar">🇸🇦 السعودية (SAR)</option>
+                <option value="zh">🇨🇳 中国 (CNY)</option>
+                <option value="ja">🇯🇵 日本 (JPY)</option>
+                <option value="ko">🇰🇷 한국 (KRW)</option>
+                <option value="us">🇺🇸 USA (USD)</option>
+                <option value="ca">🇨🇦 Canada (CAD)</option>
+                <option value="au">🇦🇺 Australia (AUD)</option>
+                <option value="br">🇧🇷 Brasil (BRL)</option>
+                <option value="mx">🇲🇽 México (MXN)</option>
+                <option value="nl">🇳🇱 Nederland (EUR)</option>
+                <option value="be">🇧🇪 België (EUR)</option>
+                <option value="at">🇦🇹 Österreich (EUR)</option>
+                <option value="ch">🇨🇭 Schweiz (CHF)</option>
+                <option value="pl">🇵🇱 Polska (PLN)</option>
+                <option value="se">🇸🇪 Sverige (SEK)</option>
+                <option value="no">🇳🇴 Norge (NOK)</option>
+                <option value="dk">🇩🇰 Danmark (DKK)</option>
+                <option value="fi">🇫🇮 Suomi (EUR)</option>
+                <option value="gr">🇬🇷 Ελλάδα (EUR)</option>
+                <option value="il">🇮🇱 ישראל (ILS)</option>
+                <option value="th">🇹🇭 ไทย (THB)</option>
+                <option value="vn">🇻🇳 Việt Nam (VND)</option>
+                <option value="id">🇮🇩 Indonesia (IDR)</option>
+                <option value="my">🇲🇾 Malaysia (MYR)</option>
+                <option value="ph">🇵🇭 Philippines (PHP)</option>
+                <option value="in">🇮🇳 India (INR)</option>
+                <option value="pk">🇵🇰 Pakistan (PKR)</option>
+                <option value="ua">🇺🇦 Україна (UAH)</option>
+                <option value="ro">🇷🇴 România (RON)</option>
+                <option value="hu">🇭🇺 Magyarország (HUF)</option>
+                <option value="cz">🇨🇿 Česko (CZK)</option>
+            </select>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="header-section">
+        <h1 class="header-title">
+            <i class="fas fa-utensils text-warning"></i> <span id="pageTitle">Fiyat Listesi</span>
+        </h1>
+        <p class="header-subtitle" id="pageSubtitle">En sevdiğiniz lezzetler burada</p>
+    </div>
+
+    <div class="container pb-5">
+        <div id="loading" class="loading">
+            <div class="spinner-border text-warning"></div>
+            <p class="mt-3 text-light" id="loadingText">Yükleniyor...</p>
+        </div>
+        
+        <div id="productList" class="product-grid"></div>
+        
+        <div id="error" class="text-center text-warning p-5" style="display:none;">
+            <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+            <p id="errorText">Ürünler yüklenemedi</p>
+        </div>
+    </div>
+
+    <!-- Tema Butonları -->
+    <div class="theme-controls">
+        <button class="theme-btn" style="background: linear-gradient(135deg, #fff, #f0f0f0)" onclick="setTheme('light')" title="Aydınlık"></button>
+        <button class="theme-btn" style="background: linear-gradient(135deg, #1a1a1a, #000)" onclick="setTheme('dark')" title="Karanlık"></button>
+        <button class="theme-btn" style="background: linear-gradient(135deg, #8B4513, #5D3A1A)" onclick="setTheme('warm')" title="Sıcak"></button>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        
+        // Para birimi ve çeviri ayarları (1 TL = X)
+        const currencyConfig = {
+            tr: { rate: 1, symbol: '₺', locale: 'tr-TR', name: 'Türk Lirası' },
+            en: { rate: 0.027, symbol: '£', locale: 'en-GB', name: 'British Pound' },
+            de: { rate: 0.026, symbol: '€', locale: 'de-DE', name: 'Euro' },
+            fr: { rate: 0.026, symbol: '€', locale: 'fr-FR', name: 'Euro' },
+            es: { rate: 0.026, symbol: '€', locale: 'es-ES', name: 'Euro' },
+            it: { rate: 0.026, symbol: '€', locale: 'it-IT', name: 'Euro' },
+            ru: { rate: 2.65, symbol: '₽', locale: 'ru-RU', name: 'Ruble' },
+            ar: { rate: 0.10, symbol: 'ر.س', locale: 'ar-SA', name: 'Riyal' },
+            zh: { rate: 0.20, symbol: '¥', locale: 'zh-CN', name: 'Yuan' },
+            ja: { rate: 4.35, symbol: '¥', locale: 'ja-JP', name: 'Yen' },
+            ko: { rate: 38.5, symbol: '₩', locale: 'ko-KR', name: 'Won' },
+            us: { rate: 0.029, symbol: '$', locale: 'en-US', name: 'Dollar' },
+            ca: { rate: 0.042, symbol: '$', locale: 'en-CA', name: 'Canadian Dollar' },
+            au: { rate: 0.045, symbol: '$', locale: 'en-AU', name: 'Australian Dollar' },
+            br: { rate: 0.16, symbol: 'R$', locale: 'pt-BR', name: 'Real' },
+            mx: { rate: 0.58, symbol: '$', locale: 'es-MX', name: 'Peso' },
+            nl: { rate: 0.026, symbol: '€', locale: 'nl-NL', name: 'Euro' },
+            be: { rate: 0.026, symbol: '€', locale: 'nl-BE', name: 'Euro' },
+            at: { rate: 0.026, symbol: '€', locale: 'de-AT', name: 'Euro' },
+            ch: { rate: 0.025, symbol: 'CHF', locale: 'de-CH', name: 'Frank' },
+            pl: { rate: 0.12, symbol: 'zł', locale: 'pl-PL', name: 'Zloty' },
+            se: { rate: 0.32, symbol: 'kr', locale: 'sv-SE', name: 'Krona' },
+            no: { rate: 0.32, symbol: 'kr', locale: 'no-NO', name: 'Krone' },
+            dk: { rate: 0.20, symbol: 'kr', locale: 'da-DK', name: 'Krone' },
+            fi: { rate: 0.026, symbol: '€', locale: 'fi-FI', name: 'Euro' },
+            gr: { rate: 0.026, symbol: '€', locale: 'el-GR', name: 'Euro' },
+            il: { rate: 0.11, symbol: '₪', locale: 'he-IL', name: 'Shekel' },
+            th: { rate: 1.08, symbol: '฿', locale: 'th-TH', name: 'Baht' },
+            vn: { rate: 730, symbol: '₫', locale: 'vi-VN', name: 'Dong' },
+            id: { rate: 470, symbol: 'Rp', locale: 'id-ID', name: 'Rupiah' },
+            my: { rate: 0.13, symbol: 'RM', locale: 'ms-MY', name: 'Ringgit' },
+            ph: { rate: 1.70, symbol: '₱', locale: 'en-PH', name: 'Peso' },
+            in: { rate: 2.50, symbol: '₹', locale: 'hi-IN', name: 'Rupee' },
+            pk: { rate: 8.50, symbol: '₨', locale: 'ur-PK', name: 'Rupee' },
+            ua: { rate: 1.20, symbol: '₴', locale: 'uk-UA', name: 'Hryvnia' },
+            ro: { rate: 0.13, symbol: 'lei', locale: 'ro-RO', name: 'Leu' },
+            hu: { rate: 10.50, symbol: 'Ft', locale: 'hu-HU', name: 'Forint' },
+            cz: { rate: 0.70, symbol: 'Kč', locale: 'cs-CZ', name: 'Koruna' }
+        };
+
+        // Çeviriler
+        const translations = {
+            tr: { title: "Fiyat Listesi", subtitle: "En sevdiğiniz lezzetler burada", loading: "Yükleniyor...", error: "Ürünler yüklenemedi" },
+            en: { title: "Price List", subtitle: "Your favorite flavors are here", loading: "Loading...", error: "Could not load products" },
+            de: { title: "Preisliste", subtitle: "Ihre Lieblingsgerichte hier", loading: "Laden...", error: "Produkte konnten nicht geladen werden" },
+            fr: { title: "Liste des Prix", subtitle: "Vos saveurs préférées sont ici", loading: "Chargement...", error: "Impossible de charger les produits" },
+            es: { title: "Lista de Precios", subtitle: "Tus sabores favoritos están aquí", loading: "Cargando...", error: "No se pudieron cargar los productos" },
+            it: { title: "Listino Prezzi", subtitle: "I tuoi gusti preferiti sono qui", loading: "Caricamento...", error: "Impossibile caricare i prodotti" },
+            ru: { title: "Прайс-лист", subtitle: "Ваши любимые блюда здесь", loading: "Загрузка...", error: "Не удалось загрузить продукты" },
+            ar: { title: "قائمة الأسعار", subtitle: "نكهتك المفضلة هنا", loading: "جار التحميل...", error: "تعذر تحميل المنتجات" },
+            zh: { title: "价格表", subtitle: "您最喜欢的口味在这里", loading: "加载中...", error: "无法加载产品" },
+            ja: { title: "プライスリスト", subtitle: "お気に入りの味がここにあります", loading: "読み込み中...", error: "商品を読み込めませんでした" },
+            ko: { title: "가격 목록", subtitle: "좋아하는 맛이 여기에 있습니다", loading: "로딩 중...", error: "제품을 불러올 수 없습니다" },
+            us: { title: "Price List", subtitle: "Your favorite flavors are here", loading: "Loading...", error: "Could not load products" },
+            ca: { title: "Price List", subtitle: "Your favorite flavors are here", loading: "Loading...", error: "Could not load products" },
+            au: { title: "Price List", subtitle: "Your favorite flavors are here", loading: "Loading...", error: "Could not load products" },
+            br: { title: "Lista de Preços", subtitle: "Seus sabores favoritos estão aqui", loading: "Carregando...", error: "Não foi possível carregar os produtos" },
+            mx: { title: "Lista de Precios", subtitle: "Tus sabores favoritos están aquí", loading: "Cargando...", error: "No se pudieron cargar los productos" },
+            nl: { title: "Prijslijst", subtitle: "Je favoriete smaken vind je hier", loading: "Laden...", error: "Kon producten niet laden" },
+            be: { title: "Prijslijst", subtitle: "Je favoriete smaken vind je hier", loading: "Laden...", error: "Kon producten niet laden" },
+            at: { title: "Preisliste", subtitle: "Ihre Lieblingsgerichte hier", loading: "Laden...", error: "Produkte konnten nicht geladen werden" },
+            ch: { title: "Preisliste", subtitle: "Ihre Lieblingsgerichte hier", loading: "Laden...", error: "Produkte konnten nicht geladen werden" },
+            pl: { title: "Cennik", subtitle: "Twoje ulubione smaki są tutaj", loading: "Ładowanie...", error: "Nie można załadować produktów" },
+            se: { title: "Prislista", subtitle: "Dina favoritsmaker finns här", loading: "Laddar...", error: "Kunde inte ladda produkter" },
+            no: { title: "Prisliste", subtitle: "Favorittsmakene dine er her", loading: "Laster...", error: "Kunne ikke laste produkter" },
+            dk: { title: "Prisliste", subtitle: "Dine yndlingssmage er her", loading: "Indlæser...", error: "Kunne ikke indlæse produkter" },
+            fi: { title: "Hinnasto", subtitle: "Suosikkimakusi ovat täällä", loading: "Ladataan...", error: "Tuotteita ei voitu ladata" },
+            gr: { title: "Τιμοκατάλογος", subtitle: "Τα αγαπημένα σας αρώματα εδώ", loading: "Φόρτωση...", error: "Δεν ήταν δυνατή η φόρτωση προϊόντων" },
+            il: { title: "רשימת מחירים", subtitle: "הטעמים האהובים שלך כאן", loading: "טוען...", error: "לא ניתן לטעון מוצרים" },
+            th: { title: "ราคาสินค้า", subtitle: "รสชาติที่คุณชอบอยู่ที่นี่", loading: "กำลังโหลด...", error: "ไม่สามารถโหลดสินค้าได้" },
+            vn: { title: "Bảng Giá", subtitle: "Hương vị yêu thích của bạn ở đây", loading: "Đang tải...", error: "Không thể tải sản phẩm" },
+            id: { title: "Daftar Harga", subtitle: "Rasa favorit Anda ada di sini", loading: "Memuat...", error: "Tidak dapat memuat produk" },
+            my: { title: "Senarai Harga", subtitle: "Rasa kegemaran anda ada di sini", loading: "Memuat...", error: "Tidak dapat memuat produk" },
+            ph: { title: "Price List", subtitle: "Your favorite flavors are here", loading: "Loading...", error: "Could not load products" },
+            in: { title: "मूल्य सूची", subtitle: "आपकी पसंदीदा स्वाद यहां हैं", loading: "लोड हो रहा है...", error: "उत्पाद लोड नहीं हो सके" },
+            pk: { title: "قیمت فہرست", subtitle: "آپ کی پسندیدہ ذائقہ یہاں ہے", loading: "لود ہو رہا ہے...", error: "مصنوعات لوڈ نہیں ہو سکیں" },
+            ua: { title: "Прайс-лист", subtitle: "Ваші улюблені смаки тут", loading: "Завантаження...", error: "Не вдалося завантажити продукти" },
+            ro: { title: "Lista de Prețuri", subtitle: "Gusturile tale preferate sunt aici", loading: "Se încarcă...", error: "Nu s-au putut încărca produsele" },
+            hu: { title: "Árlista", subtitle: "A kedvenc ízek itt vannak", loading: "Betöltés...", error: "A termékek nem tölthetők be" },
+            cz: { title: "Ceník", subtitle: "Vaše oblíbené chutě jsou zde", loading: "Načítání...", error: "Nepodařilo se načíst produkty" }
+        };
+
+        const defaultProducts = [
+            { id: 1, name: "Whopper", price: 189, image: "https://via.placeholder.com/400x300?text=Whopper" },
+            { id: 2, name: "King Chicken", price: 149, image: "https://via.placeholder.com/400x300?text=King+Chicken" },
+            { id: 3, name: "Big King", price: 159, image: "https://via.placeholder.com/400x300?text=Big+King" },
+            { id: 4, name: "Hamburger", price: 99, image: "https://via.placeholder.com/400x300?text=Hamburger" },
+            { id: 5, name: "Cheeseburger", price: 119, image: "https://via.placeholder.com/400x300?text=Cheeseburger" },
+            { id: 6, name: "Patates (Orta)", price: 59, image: "https://via.placeholder.com/400x300?text=Patates" },
+            { id: 7, name: "Cola", price: 35, image: "https://via.placeholder.com/400x300?text=Cola" },
+            { id: 8, name: "Milkshake", price: 69, image: "https://via.placeholder.com/400x300?text=Milkshake" }
+        ];
+
+        let currentLang = localStorage.getItem('wowburger_lang') || 'tr';
+
+        function formatPrice(priceInTL) {
+            const config = currencyConfig[currentLang];
+            const converted = priceInTL * config.rate;
+            
+            // Ondalık basamak kontrolü
+            let decimals = 0;
+            if (converted < 1) decimals = 2;
+            else if (converted < 10) decimals = 1;
+            
+            return converted.toLocaleString(config.locale, { 
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals 
+            }) + ' ' + config.symbol;
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('wowburger_lang', lang);
+            document.getElementById('langSelect').value = lang;
+            
+            const t = translations[lang];
+            document.getElementById('pageTitle').textContent = t.title;
+            document.getElementById('pageSubtitle').textContent = t.subtitle;
+            document.getElementById('loadingText').textContent = t.loading;
+            document.getElementById('errorText').textContent = t.error;
+            
+            loadProducts();
+        }
+
+        async function loadProducts() {
+            try {
+                const res = await fetch(`${API_URL}/api/products`);
+                const products = await res.json();
+                
+                if (products && products.length > 0) {
+                    document.getElementById('loading').style.display = 'none';
+                    renderProducts(products);
+                } else {
+                    renderProducts(defaultProducts);
+                }
+            } catch (e) {
+                console.log('Server bağlantısı yok, local ürünler kullanılıyor');
+                document.getElementById('loading').style.display = 'none';
+                renderProducts(defaultProducts);
+            }
+        }
+
+        function renderProducts(products) {
+            document.getElementById('productList').innerHTML = products.map(p => `
+                <div class="card h-100">
+                    <img src="${p.image || 'https://via.placeholder.com/400x300?text=No+Image'}" 
+                         class="card-img-top" 
+                         alt="${p.name}"
+                         onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <h6 class="product-name mb-2">${p.name}</h6>
+                        <p class="price-tag mb-0">
+                            ${formatPrice(p.price)}
+                        </p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setTheme(theme) {
+            document.body.className = theme;
+            localStorage.setItem('wowburger_theme', theme);
+        }
+
+        // Kaydedilmiş ayarları yükle
+        const savedTheme = localStorage.getItem('wowburger_theme') || 'dark';
+        setTheme(savedTheme);
+        
+        document.getElementById('langSelect').value = currentLang;
+        changeLanguage(currentLang);
+    </script>
+</body>
+</html>
